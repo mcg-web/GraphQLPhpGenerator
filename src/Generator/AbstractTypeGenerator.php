@@ -12,6 +12,7 @@
 namespace Overblog\GraphQLGenerator\Generator;
 
 use GraphQL\Type\Definition\Type;
+use Overblog\GraphQLGenerator\Expression\CallableExpression;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -80,6 +81,11 @@ EOF;
     public function isExpression($str)
     {
         return $this->canManageExpressionLanguage && $str instanceof Expression;
+    }
+
+    public function isCallableExpression($str)
+    {
+        return $str instanceof CallableExpression;
     }
 
     public static function getInternalTypes($name)
@@ -191,19 +197,11 @@ EOF;
 
         $code = static::$closureTemplate;
 
-        if (is_callable($value[$key])) {
-            $func = $value[$key];
-            $code = sprintf($code, null, 'call_user_func_array(%s, func_get_args())');
+        if ($this->isCallableExpression($value[$key])) {
+            $callableCode = sprintf('call_user_func_array(%s, func_get_args())', $value[$key]);
+            $code = sprintf($code, null, $callableCode);
 
-            if (is_array($func) && isset($func[0]) && is_string($func[0])) {
-                $code = sprintf($code, $this->varExport($func));
-
-                return $code;
-            } elseif (is_string($func)) {
-                $code = sprintf($code, var_export($func, true));
-
-                return $code;
-            }
+            return $code;
         } elseif ($this->isExpression($value[$key])) {
             if (null === $compilerNames) {
                 preg_match_all('@\$([a-z_][a-z0-9_]+)@i', $argDefinitions, $matches);

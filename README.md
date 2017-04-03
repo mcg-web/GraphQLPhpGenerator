@@ -26,6 +26,7 @@ Usage
 $loader = require __DIR__.'/vendor/autoload.php';
 
 use GraphQL\Schema;
+use Overblog\GraphQLGenerator\Expression\CallableExpression;
 use Overblog\GraphQLGenerator\Generator\TypeGenerator;
 use Symfony\Component\ExpressionLanguage\Expression;
 
@@ -40,7 +41,7 @@ $configs = [
                 'friends' => ['type' => '[Character]', 'description' => 'The friends of the character.'],
                 'appearsIn' => ['type' => '[Episode]', 'description' => 'Which movies they appear in.'],
             ],
-            'resolveType' => 'Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType',
+            'resolveType' => new CallableExpression('Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType'),
         ],
     ],
     /*...*/
@@ -57,7 +58,7 @@ $configs = [
                             'description' => 'If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.',
                         ],
                     ],
-                    'resolve' => ['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getHero'],
+                    'resolve' => new CallableExpression('["Overblog\\GraphQLGenerator\\Tests\\Resolver", "getHero"]'),
                 ],
             ],
         ],
