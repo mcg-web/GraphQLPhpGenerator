@@ -143,10 +143,13 @@ EOF;
                     $r[] = ($indexed ? '' : $this->varExport($key, $default) . ' => ')
                         . $this->varExport($value, $default);
                 }
-                return "[" . implode(", ", $r)  . "]";
+                return '[' . implode(', ', $r) . ']';
 
             case $this->isExpression($var):
-                return $code = $this->getExpressionLanguage()->compile($var, $compilerNames);
+                return $this->getExpressionLanguage()->compile($var, $compilerNames);
+
+            case $this->isCallableExpression($var):
+                return (string) $var;
 
             case is_object($var):
                 return $default;

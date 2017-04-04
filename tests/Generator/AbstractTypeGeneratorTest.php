@@ -12,6 +12,7 @@
 namespace Overblog\GraphQLGenerator\Tests\Generator;
 
 use Composer\Autoload\ClassLoader;
+use Overblog\GraphQLGenerator\Expression\CallableExpression;
 use Overblog\GraphQLGenerator\Generator\TypeGenerator;
 use Overblog\GraphQLGenerator\Tests\TestCase;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -79,8 +80,12 @@ abstract class AbstractTypeGeneratorTest extends TestCase
             function ($v) {
                 if (is_array($v)) {
                     return call_user_func([$this, 'processConfig'], $v);
-                } elseif (is_string($v) && 0 === strpos($v, '@=')) {
-                    return new Expression(substr($v, 2));
+                } elseif (is_string($v)) {
+                    if (0 === strpos($v, '@=')) {
+                        return new Expression(substr($v, 2));
+                    } elseif (0 === strpos($v, '$=')) {
+                        return new CallableExpression(substr($v, 2));
+                    }
                 }
 
                 return $v;

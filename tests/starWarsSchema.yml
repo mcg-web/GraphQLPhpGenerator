@@ -2,9 +2,9 @@
 DateTime:
     type: custom-scalar
     config:
-        serialize: ["Overblog\\GraphQLGenerator\\Tests\\DateTimeType", "serialize"]
-        parseValue: ["Overblog\\GraphQLGenerator\\Tests\\DateTimeType", "parseValue"]
-        parseLiteral: ["Overblog\\GraphQLGenerator\\Tests\\DateTimeType", "parseLiteral"]
+        serialize: "$=['Overblog\\GraphQLGenerator\\Tests\\DateTimeType', 'serialize']"
+        parseValue: "$=['Overblog\\GraphQLGenerator\\Tests\\DateTimeType', 'parseValue']"
+        parseLiteral: "$=['Overblog\\GraphQLGenerator\\Tests\\DateTimeType', 'parseLiteral']"
 
 # Characters in the Star Wars trilogy are either humans or droids.
 #
@@ -32,8 +32,7 @@ Character:
             appearsIn:
                 type: "[Episode]"
                 description: "Which movies they appear in."
-        # used expression language to defined resolver (tagged services)
-        resolveType: "Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType"
+        resolveType: "$='Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType'"
 
 #  The other type of character in Star Wars is a droid.
 #
@@ -60,7 +59,7 @@ Droid:
             friends:
                 type: "[Character]"
                 description: "The friends of the droid, or an empty list if they have none."
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver" , "getFriends"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getFriends']"
             appearsIn:
                 type: "[Episode]"
                 description: "Which movies they appear in."
@@ -110,7 +109,7 @@ Human:
             friends:
                 type: "[Character]"
                 description: "The friends of the character."
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver" , "getFriends"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getFriends']"
             appearsIn:
                 type: "[Episode]"
                 description: "Which movies they appear in."
@@ -146,27 +145,27 @@ Query:
                         description: |
                           If omitted, returns the hero of the whole saga.
                           If provided, returns the hero of that particular episode.
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver", "getHero"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getHero']"
             human:
                 type: "Human"
                 args:
                     id:
                         description: "id of the human"
                         type: "String!"
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver", "getHuman"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getHuman']"
             droid:
                 type: "Droid"
                 args:
                     id:
                         description: "id of the droid"
                         type: "String!"
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver", "getDroid"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getDroid']"
             dateTime:
                 type: "DateTime!"
                 args:
                     dateTime:
                         type: "DateTime"
-                resolve: ["Overblog\\GraphQLGenerator\\Tests\\Resolver", "getDateTime"]
+                resolve: "$=['Overblog\\GraphQLGenerator\\Tests\\Resolver', 'getDateTime']"
 
 HumanAndDroid:
     type: union
