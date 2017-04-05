@@ -12,7 +12,7 @@
 namespace Overblog\GraphQLGenerator\Expression;
 
 /**
- * Represents an callable expression.
+ * Represents a callable expression.
  */
 class CallableExpression
 {
