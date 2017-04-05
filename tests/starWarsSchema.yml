@@ -32,7 +32,7 @@ Character:
             appearsIn:
                 type: "[Episode]"
                 description: "Which movies they appear in."
-        resolveType: "$='Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType'"
+        resolveType: "$=Overblog\\GraphQLGenerator\\Tests\\Resolver::resolveType"
 
 #  The other type of character in Star Wars is a droid.
 #
