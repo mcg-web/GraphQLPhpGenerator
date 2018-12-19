@@ -18,13 +18,11 @@
         }
     },
     "require": {
-        "php": "^5.5|~7.0",
-        "webonyx/graphql-php": "^0.11.2|^0.12.0"
+        "php": "^7.1",
+        "webonyx/graphql-php": "^0.13.0"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "^1.11",
-        "phpunit/phpunit": "^4.1|^5.1",
-        "sllh/php-cs-fixer-styleci-bridge": "^1.5",
+        "phpunit/phpunit": "^5.7.26 || ^6.0 || ^7.2",
         "symfony/expression-language": "^3.3",
         "symfony/filesystem": "^3.3",
         "symfony/process": "^3.3",
@@ -39,5 +37,29 @@
         "psr-4": {
             "Overblog\\GraphQLGenerator\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "bin/phpunit --color=always -v --debug",
+        "static-analysis": "phpstan analyse --ansi",
+        "bench":  [
+            "test -f phpbench.phar || wget https://phpbench.github.io/phpbench/phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar.pubkey",
+            "@php phpbench.phar run -l dots --ansi -vvv --report='generator: \"table\", cols: [\"benchmark\", \"subject\", \"params\", \"best\", \"mean\", \"mode\", \"worst\", \"diff\"], break: [\"benchmark\"], sort: {mean: \"asc\"}'"
+        ],
+        "install-cs": "test -f php-cs-fixer.phar || wget https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer.phar",
+        "fix-cs": [
+            "@install-cs",
+            "@php php-cs-fixer.phar fix --diff -v --allow-risky=yes --ansi"
+        ],
+        "check-cs": [
+            "@install-cs",
+            "@php php-cs-fixer.phar fix --dry-run --diff -v --allow-risky=yes --ansi"
+        ],
+        "code-quality": [
+            "rm composer.lock",
+            "@composer install --ansi",
+            "@static-analysis",
+            "@bench",
+            "@check-cs"
+        ]
     }
 }

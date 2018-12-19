@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -15,11 +15,11 @@ use Symfony\Component\Process\ProcessBuilder;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    public function assertCodeStandard($pathToCode, $level = null, $fixers = null)
+    public function assertCodeStandard($pathToCode, $level = null, $fixers = null): void
     {
         // Run linter in dry-run mode so it changes nothing.
         $csBuilder = new ProcessBuilder([
-            __DIR__ . '/../bin/php-cs-fixer',
+            __DIR__.'php-cs-fixer.phar',
             'fix',
             '--dry-run',
             '--diff',
@@ -27,20 +27,20 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         ]);
 
         if (null !== $level) {
-            $csBuilder->add('--level=' . $level);
+            $csBuilder->add('--level='.$level);
         }
         if (null !== $fixers) {
-            $csBuilder->add('--fixers=' . $fixers);
+            $csBuilder->add('--fixers='.$fixers);
         }
 
         $process = $csBuilder->getProcess();
-        $process->setWorkingDirectory(__DIR__ . '/../bin');
+        $process->setWorkingDirectory(__DIR__.'/../bin');
         $process->setTimeout(60);
         $process->run();
 
         $this->assertTrue(
             $process->isSuccessful(),
-            sprintf(
+            \sprintf(
                 'cli "%s" linter reported errors in "%s/": %s',
                 $process->getCommandLine(),
                 $pathToCode,

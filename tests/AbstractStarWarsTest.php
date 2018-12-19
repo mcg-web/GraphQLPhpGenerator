@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -23,11 +23,11 @@ abstract class AbstractStarWarsTest extends AbstractTypeGeneratorTest
      */
     protected $schema;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->classLoader->setPsr4('GraphQL\\Tests\\', __DIR__ . '/../vendor/webonyx/graphql-php/tests');
+        $this->classLoader->setPsr4('GraphQL\\Tests\\', __DIR__.'/../vendor/webonyx/graphql-php/tests');
 
         $this->generateClasses();
 
@@ -44,15 +44,15 @@ abstract class AbstractStarWarsTest extends AbstractTypeGeneratorTest
      * @param $expected
      * @param null $variables
      */
-    protected function assertValidQuery($query, $expected, $variables = null)
+    protected function assertValidQuery($query, $expected, $variables = null): void
     {
         $actual = GraphQL::executeQuery($this->schema, $query, null, null, $variables)
-            ->toArray(Debug::INCLUDE_DEBUG_MESSAGE|Debug::INCLUDE_TRACE);
+            ->toArray(Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE);
         $expected = ['data' => $expected];
-        $this->assertEquals($expected, $actual, json_encode($actual));
+        $this->assertEquals($expected, $actual, \json_encode($actual));
     }
 
-    protected function sortSchemaEntry(array &$entries, $entryKey, $sortBy)
+    protected function sortSchemaEntry(array &$entries, $entryKey, $sortBy): void
     {
         if (isset($entries['data']['__schema'][$entryKey])) {
             $data = &$entries['data']['__schema'][$entryKey];
@@ -60,8 +60,8 @@ abstract class AbstractStarWarsTest extends AbstractTypeGeneratorTest
             $data = &$entries['__schema'][$entryKey];
         }
 
-        usort($data, function ($data1, $data2) use ($sortBy) {
-            return strcmp($data1[$sortBy], $data2[$sortBy]);
+        \usort($data, function ($data1, $data2) use ($sortBy) {
+            return \strcmp($data1[$sortBy], $data2[$sortBy]);
         });
     }
 }

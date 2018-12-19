@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -16,8 +16,8 @@ class GlobalTest extends TestCase
     /**
      * @group cs
      */
-    public function testCodeStandard()
+    public function testCodeStandard(): void
     {
-        $this->assertCodeStandard(__DIR__ . '/../.');
+        $this->assertCodeStandard(__DIR__.'/../.');
     }
 }

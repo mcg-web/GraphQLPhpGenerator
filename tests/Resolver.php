@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -39,7 +39,7 @@ abstract class Resolver
     /**
      * @param Type $humanType
      */
-    public static function setHumanType($humanType)
+    public static function setHumanType($humanType): void
     {
         self::$humanType = $humanType;
     }
@@ -47,7 +47,7 @@ abstract class Resolver
     /**
      * @param Type $droidType
      */
-    public static function setDroidType($droidType)
+    public static function setDroidType($droidType): void
     {
         self::$droidType = $droidType;
     }
@@ -72,23 +72,23 @@ abstract class Resolver
 
     public static function getHero($root, $args)
     {
-        return StarWarsData::getHero(isset($args['episode']['name']) ? $args['episode']['name'] : null);
+        return StarWarsData::getHero($args['episode']['name'] ?? null);
     }
 
     public static function getHuman($root, $args)
     {
         $humans = StarWarsData::humans();
-        return isset($humans[$args['id']]) ? $humans[$args['id']] : null;
+        return $humans[$args['id']] ?? null;
     }
 
     public static function getDroid($root, $args)
     {
         $droids = StarWarsData::droids();
-        return isset($droids[$args['id']]) ? $droids[$args['id']] : null;
+        return $droids[$args['id']] ?? null;
     }
 
     public static function getDateTime($root, $args)
     {
-        return isset($args['dateTime']) ? $args['dateTime'] : new \DateTime('2016-11-28 12:00:00');
+        return $args['dateTime'] ?? new \DateTime('2016-11-28 12:00:00');
     }
 }

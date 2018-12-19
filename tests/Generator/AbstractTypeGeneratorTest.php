@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -29,18 +29,18 @@ abstract class AbstractTypeGeneratorTest extends TestCase
     /** @var ClassLoader */
     protected $classLoader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tmpDir = sys_get_temp_dir() . '/mcgweb-graphql-generator';
+        $this->tmpDir = \sys_get_temp_dir().'/mcgweb-graphql-generator';
         $this->filesystem->remove($this->tmpDir);
         $this->typeConfigs = $this->prepareTypeConfigs();
         $this->typeGenerator = new TypeGenerator();
         $this->typeGenerator->setExpressionLanguage(new ExpressionLanguage());
-        $this->classLoader = require __DIR__ . '/../../vendor/autoload.php';
+        $this->classLoader = require __DIR__.'/../../vendor/autoload.php';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->filesystem->remove($this->tmpDir);
     }
@@ -68,19 +68,19 @@ abstract class AbstractTypeGeneratorTest extends TestCase
     protected function prepareTypeConfigs()
     {
         $yaml = new \Symfony\Component\Yaml\Parser();
-        $typeConfigs = $yaml->parse(file_get_contents(__DIR__ . '/../starWarsSchema.yml'));
+        $typeConfigs = $yaml->parse(\file_get_contents(__DIR__.'/../starWarsSchema.yml'));
 
         return $this->processConfig($typeConfigs);
     }
 
     protected function processConfig(array $configs)
     {
-        return array_map(
+        return \array_map(
             function ($v) {
-                if (is_array($v)) {
-                    return call_user_func([$this, 'processConfig'], $v);
-                } elseif (is_string($v) && 0 === strpos($v, '@=')) {
-                    return new Expression(substr($v, 2));
+                if (\is_array($v)) {
+                    return \call_user_func([$this, 'processConfig'], $v);
+                } elseif (\is_string($v) && 0 === \strpos($v, '@=')) {
+                    return new Expression(\substr($v, 2));
                 }
 
                 return $v;
@@ -91,6 +91,6 @@ abstract class AbstractTypeGeneratorTest extends TestCase
 
     protected function getType($type)
     {
-        return call_user_func(["\\".$this->typeGenerator->getClassNamespace().'\\'.$type.'Type', 'getInstance']);
+        return \call_user_func(["\\".$this->typeGenerator->getClassNamespace().'\\'.$type.'Type', 'getInstance']);
     }
 }

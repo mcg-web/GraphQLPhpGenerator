@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -20,7 +20,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Skeleton dir "fake" not found.
      */
-    public function testWrongSetSkeletonDirs()
+    public function testWrongSetSkeletonDirs(): void
     {
         $this->typeGenerator->setSkeletonDirs(['fake']);
     }
@@ -29,7 +29,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Skeleton dir must be string or object implementing __toString, "array" given.
      */
-    public function testWrongAddSkeletonDir()
+    public function testWrongAddSkeletonDir(): void
     {
         $this->typeGenerator->addSkeletonDir([]);
     }
@@ -38,7 +38,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Skeleton dirs must be array or object implementing \Traversable interface, "object" given.
      */
-    public function testWrongObjectSetSkeletonDir()
+    public function testWrongObjectSetSkeletonDir(): void
     {
         $this->typeGenerator->setSkeletonDirs(new \stdClass());
     }
@@ -48,12 +48,12 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp  /Skeleton "fake" could not be found in .*\/skeleton./
      */
-    public function testWrongGetSkeletonDirs()
+    public function testWrongGetSkeletonDirs(): void
     {
         $this->typeGenerator->getSkeletonContent('fake');
     }
 
-    public function testTypeAlias2String()
+    public function testTypeAlias2String(): void
     {
         $this->generateClasses($this->getConfigs());
 
@@ -87,7 +87,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Malformed ListOf wrapper type "[String" expected "]" but got "g".
      */
-    public function testTypeAlias2StringInvalidListOf()
+    public function testTypeAlias2StringInvalidListOf(): void
     {
         $this->generateClasses([
             'T' => [
@@ -101,10 +101,10 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
         ]);
     }
 
-    public function testAddTraitAndClearTraits()
+    public function testAddTraitAndClearTraits(): void
     {
-        $trait = __NAMESPACE__ . '\\FooTrait';
-        $interface = __NAMESPACE__ . '\\FooInterface';
+        $trait = __NAMESPACE__.'\\FooTrait';
+        $interface = __NAMESPACE__.'\\FooInterface';
         $this->typeGenerator->addTrait($trait)
             ->addImplement($interface);
         $this->generateClasses(['U' => $this->getConfigs()['T']]);
@@ -124,10 +124,10 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
         $type = $this->getType('V');
 
         $this->assertNotInstanceOf($interface, $type);
-        $this->assertFalse(method_exists($type, 'bar'));
+        $this->assertFalse(\method_exists($type, 'bar'));
     }
 
-    public function testCallbackEntryDoesNotTreatObject()
+    public function testCallbackEntryDoesNotTreatObject(): void
     {
         $this->generateClasses([
             'W' => [
@@ -157,14 +157,14 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Generator [Overblog\GraphQLGenerator\Generator\TypeGenerator::generateFake] for placeholder "fake" is not callable.
      */
-    public function testProcessInvalidPlaceHoldersReplacements()
+    public function testProcessInvalidPlaceHoldersReplacements(): void
     {
         $this->typeGenerator->setSkeletonDirs(__DIR__.'/../Resources/Skeleton');
 
         $this->generateClasses($this->getConfigs());
     }
 
-    public function testTypeSingletonCantBeClone()
+    public function testTypeSingletonCantBeClone(): void
     {
         $this->generateClasses($this->getConfigs());
 
@@ -176,7 +176,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
         $t = clone $type;
     }
 
-    public function testTypeSingletonCanBeInstantiatedOnlyOnce()
+    public function testTypeSingletonCanBeInstantiatedOnlyOnce(): void
     {
         $this->generateClasses($this->getConfigs());
 
@@ -185,7 +185,7 @@ class TypeGeneratorTest extends AbstractTypeGeneratorTest
 
         $this->setExpectedException('\DomainException', 'You can not create more than one copy of a singleton.');
 
-        $class = get_class($type);
+        $class = \get_class($type);
         $t = new $class();
     }
 

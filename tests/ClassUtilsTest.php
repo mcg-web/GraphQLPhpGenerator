@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the OverblogGraphQLPhpGenerator package.
@@ -21,7 +21,7 @@ class ClassUtilsTest extends TestCase
      *
      * @dataProvider shortenClassFromCodeDataProvider
      */
-    public function testShortenClassFromCode($code, $expected)
+    public function testShortenClassFromCode($code, $expected): void
     {
         $actual = ClassUtils::shortenClassFromCode($code);
 
